@@ -4,19 +4,25 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class GetRustFuncApi : MonoBehaviour
 {
 
     public TMP_Text greetingsText;
 
+    public Button getGreetingsButton;
+
+    public TMP_InputField getStringInput;
+    GetFromRustBackend getFromRustBackend;
+
     // Start is called before the first frame update
     void Start()
     {
-        GetFromRustBackend getFromRustBackend = new GetFromRustBackend();
+        getFromRustBackend = new GetFromRustBackend();
 
-        
 
+        getGreetingsButton.onClick.AddListener(GetGreetings);
         int a = 1;
         int b = 2;
         unsafe
@@ -32,9 +38,19 @@ public class GetRustFuncApi : MonoBehaviour
         string outputString = getFromRustBackend.GetRustGreetingsFromBackend(inputString);
         Debug.Log($"result from rust is {outputString}");
 
-        greetingsText.text = outputString;   
+        //greetingsText.text = outputString;   
        
 
+    }
+
+    public void GetGreetings()
+    {
+        string inputString = getStringInput.text;
+        getStringInput.text = "";
+        string outputString = getFromRustBackend.GetRustGreetingsFromBackend(inputString);
+        Debug.Log($"result from rust is {outputString}");
+
+        greetingsText.text = outputString;
     }
 
     // Update is called once per frame
